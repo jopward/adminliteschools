@@ -55,16 +55,8 @@ class Config(object):
         try:
             
             # Relational DBMS: PSQL, MySql
-            SQLALCHEMY_DATABASE_URI = '{}://{}:{}@{}:{}/{}'.format(
-                DB_ENGINE,
-                DB_USERNAME,
-                DB_PASS,
-                DB_HOST,
-                DB_PORT,
-                DB_NAME
-            ) 
-
-            USE_SQLITE  = False
+            SQLALCHEMY_DATABASE_URI = "postgresql://neondb_owner:npg_vCLRejMaz6W3@ep-falling-fog-ag9dk1rx-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
+            SQLALCHEMY_TRACK_MODIFICATIONS = False
 
         except Exception as e:
 

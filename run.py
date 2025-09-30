@@ -2,7 +2,11 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
+from flask import Flask
 
+app = Flask(__name__)
+
+# إعدادات أخرى إذا موجودة
 import os
 from   flask_migrate import Migrate
 from   flask_minify  import Minify
@@ -10,6 +14,8 @@ from   sys import exit
 
 from apps.config import config_dict
 from apps import create_app, db
+from apps.schools.routes.school_routes import school_bp
+app.register_blueprint(school_bp, url_prefix='/schools')
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
