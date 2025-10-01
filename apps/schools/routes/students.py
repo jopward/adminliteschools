@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.student import (
+from ..models.student import (
     create_student,
     get_student_by_id,
     get_all_students,

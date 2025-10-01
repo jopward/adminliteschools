@@ -1,6 +1,6 @@
 # routes/grades.py
 from flask import Blueprint, request, jsonify
-from models.grades import (
+from ..models.grades import (
     add_grade, get_grade_by_id, get_grades_for_student,
     get_grades_by_subject, update_grade, delete_grade
 )

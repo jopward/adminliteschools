@@ -1,6 +1,6 @@
 # routes/auth.py
 from flask import Blueprint, request, jsonify, session
-from models.user import verify_user  # استدعاء دوال التحقق من الموديل
+from ..models.user import verify_user  # استدعاء دوال التحقق من الموديل
 
 # تعريف الـ Blueprint
 auth_bp = Blueprint("auth_bp", __name__)

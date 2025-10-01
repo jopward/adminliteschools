@@ -1,5 +1,5 @@
 # models/class_subjects.py
-from db.db_setup import get_connection
+from ..db.db_setup import get_connection
 
 # ============================
 # CRUD + عمليات البحث والفلترة

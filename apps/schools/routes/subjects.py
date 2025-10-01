@@ -1,6 +1,6 @@
 # routes/subjects.py
 from flask import Blueprint, request, jsonify
-from models.subjects import (
+from ..models.subjects import (
     create_subject, get_subject_by_id, get_all_subjects,
     update_subject, delete_subject
 )

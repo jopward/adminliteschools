@@ -1,5 +1,5 @@
 # models/grades.py
-from db.db_setup import get_connection
+from ..db.db_setup import get_connection
 
 # ============================
 # CRUD للعلامات

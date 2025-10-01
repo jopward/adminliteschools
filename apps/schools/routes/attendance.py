@@ -1,6 +1,6 @@
 # routes/attendance.py
 from flask import Blueprint, request, jsonify
-from models.attendance import (
+from ..models.attendance import (
     add_attendance, get_attendance_by_id,
     get_attendance_for_student, get_attendance_for_class,
     update_attendance, delete_attendance

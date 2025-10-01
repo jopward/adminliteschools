@@ -1,6 +1,6 @@
 # routes/tracking.py
 from flask import Blueprint, request, jsonify
-from models.tracking import (
+from ..models.tracking import (
     add_tracking, get_tracking_by_id, get_tracking_for_student,
     update_tracking, delete_tracking
 )

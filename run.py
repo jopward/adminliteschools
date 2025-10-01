@@ -2,63 +2,54 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-from flask import Flask
-
-app = Flask(__name__)
-
-# إعدادات أخرى إذا موجودة
 import os
-from   flask_migrate import Migrate
-from   flask_minify  import Minify
-from   sys import exit
-
-from apps.config import config_dict
+from sys import exit
+from flask_migrate import Migrate
+from flask_minify import Minify
 from apps import create_app, db
-from apps.schools.routes.school_routes import school_bp
-app.register_blueprint(school_bp, url_prefix='/schools')
+from apps.config import config_dict
+from apps.schools.routes import register_blueprints
 
-# WARNING: Don't run with debug turned on in production!
+# DEBUG
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
-# The configuration
+# اختيار الإعدادات
 get_config_mode = 'Debug' if DEBUG else 'Production'
-
 try:
-
-    # Load the configuration using the default values
     app_config = config_dict[get_config_mode.capitalize()]
-
 except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
+# إنشاء التطبيق
 app = create_app(app_config)
 
-# Create tables & Fallback to SQLite
+# تسجيل كل Blueprints
+register_blueprints(app)
+
+# إنشاء الجداول & fallback إلى SQLite إذا فشل
 with app.app_context():
-    
     try:
         db.create_all()
     except Exception as e:
-
-        print('> Error: DBMS Exception: ' + str(e) )
-
-        # fallback to SQLite
+        print('> Error: DBMS Exception: ' + str(e))
         basedir = os.path.abspath(os.path.dirname(__file__))
-        app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
         print('> Fallback to SQLite ')
         db.create_all()
 
 # Apply all changes
 Migrate(app, db)
 
+# Minify إذا لم يكن DEBUG
 if not DEBUG:
     Minify(app=app, html=True, js=False, cssless=False)
-    
+
+# Logging
 if DEBUG:
-    app.logger.info('DEBUG            = ' + str(DEBUG)             )
-    app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
+    app.logger.info('DEBUG            = ' + str(DEBUG))
+    app.logger.info('Page Compression = ' + ('FALSE' if DEBUG else 'TRUE'))
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
 
+# تشغيل التطبيق
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=DEBUG)

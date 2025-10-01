@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.classes import (
+from ..models.classes import (
     create_class,
     get_class_by_id,
     get_all_classes,
