@@ -29,12 +29,14 @@ register_blueprints(app)
 # إنشاء الجداول & fallback إلى SQLite إذا فشل
 with app.app_context():
     try:
-        db.create_all()
+        db.create_all()  # إنشاء الجداول
     except Exception as e:
         print('> Error: DBMS Exception: ' + str(e))
+        # تعديل URI مؤقت للـ SQLite فقط في حالة الفشل
         basedir = os.path.abspath(os.path.dirname(__file__))
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
         print('> Fallback to SQLite ')
+        # db موجود بالفعل ومهيأ، لذلك لا تعيد init_app، فقط create_all
         db.create_all()
 
 # Apply all changes

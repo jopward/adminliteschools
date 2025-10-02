@@ -1,12 +1,10 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
+# apps/authentication/__init__.py
 from flask import Blueprint
 
+# تعريف الـ Blueprint
 blueprint = Blueprint(
-    'authentication_blueprint',
+    'authentication_blueprint',   # اسم الـ Blueprint
     __name__,
-    url_prefix=''
+    template_folder='templates',  # مكان ملفات القوالب
+    url_prefix='/auth'            # كل الراوتات تحت /auth
 )

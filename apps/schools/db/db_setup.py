@@ -1,5 +1,5 @@
-# db/db_setup.py
-from db_connection import get_connection
+# db/db_setup.p
+from .db_connection import get_connection
 from werkzeug.security import generate_password_hash
 
 def create_tables():

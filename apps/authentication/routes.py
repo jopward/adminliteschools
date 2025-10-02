@@ -33,8 +33,7 @@ def login_github():
     """ Github login """
     if not github.authorized:
         return redirect(url_for("github.login"))
-
-    res = github.get("/user")
+    # تسجيل الدخول ومعالجة المستخدم بتصير بالـ signal في auth.py
     return redirect(url_for('home_blueprint.index'))
 
 
@@ -43,9 +42,9 @@ def login_google():
     """ Google login """
     if not google.authorized:
         return redirect(url_for("google.login"))
-
-    res = google.get("/oauth2/v1/userinfo")
+    # تسجيل الدخول ومعالجة المستخدم بتصير بالـ signal في auth.py
     return redirect(url_for('home_blueprint.index'))
+
 
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -61,7 +60,6 @@ def login():
 
         # Check the password
         if user and verify_pass(password, user.password):
-
             login_user(user)
             return redirect(url_for('authentication_blueprint.route_default'))
 
@@ -84,7 +82,7 @@ def register():
         username = request.form['username']
         email = request.form['email']
 
-        # Check usename exists
+        # Check username exists
         user = Users.query.filter_by(username=username).first()
         if user:
             return render_template('accounts/register.html',
@@ -105,10 +103,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return render_template('accounts/register.html',
-                               msg='User created please <a href="/login">login</a>',
-                               success=True,
-                               form=create_account_form)
+        return redirect(url_for('authentication_blueprint.login'))
 
     else:
         return render_template('accounts/register.html', form=create_account_form)
@@ -141,9 +136,11 @@ def not_found_error(error):
 def internal_error(error):
     return render_template('home/page-500.html'), 500
 
+
 @blueprint.context_processor
 def has_github():
     return {'has_github': bool(Config.GITHUB_ID) and bool(Config.GITHUB_SECRET)}
+
 
 @blueprint.context_processor
 def has_google():
