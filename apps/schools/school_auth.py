@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from functools import wraps
 from apps.schools.models.user import verify_user, get_user_by_id, create_user
 
-school_auth_bp = Blueprint('school_auth', __name__, url_prefix='/auth')
+# إنشاء Blueprint مع prefix واضح
+school_auth_bp = Blueprint('school_auth', __name__, url_prefix='/schools/auth')
+
 
 # ----------------------------
 # تسجيل مستخدم جديد
@@ -23,7 +25,7 @@ def register():
         except Exception as e:
             flash(f"❌ خطأ أثناء إنشاء الحساب: {e}", "danger")
 
-    return render_template('register.html')
+    return render_template('schools/register.html')
 
 
 # ----------------------------
@@ -40,11 +42,12 @@ def login():
             session['user_id'] = user['id']
             session['role'] = user['role']
             flash("تم تسجيل الدخول بنجاح ✅", "success")
-            return redirect(url_for('home'))  # عدّل 'home' حسب الراوت اللي عندك
+            # تعديل هنا ليشير للداش بورد الصحيح
+            return redirect(url_for('home_blueprint.index'))
         else:
             flash("❌ اسم المستخدم أو كلمة المرور غير صحيحة", "danger")
 
-    return render_template('login.html')
+    return render_template('schools/login.html')
 
 
 # ----------------------------

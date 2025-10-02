@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from flask_minify import Minify
 from apps import create_app, db
 from apps.config import config_dict
-from apps.schools.routes import register_blueprints
+from apps.schools import init_app as init_schools   # 👈 بس هذا نستدعيه
 
 # DEBUG
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
@@ -23,8 +23,8 @@ except KeyError:
 # إنشاء التطبيق
 app = create_app(app_config)
 
-# تسجيل كل Blueprints
-register_blueprints(app)
+# ✅ سجل قسم المدارس فقط من هنا
+init_schools(app)
 
 # إنشاء الجداول & fallback إلى SQLite إذا فشل
 with app.app_context():
@@ -32,11 +32,9 @@ with app.app_context():
         db.create_all()  # إنشاء الجداول
     except Exception as e:
         print('> Error: DBMS Exception: ' + str(e))
-        # تعديل URI مؤقت للـ SQLite فقط في حالة الفشل
         basedir = os.path.abspath(os.path.dirname(__file__))
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
         print('> Fallback to SQLite ')
-        # db موجود بالفعل ومهيأ، لذلك لا تعيد init_app، فقط create_all
         db.create_all()
 
 # Apply all changes
